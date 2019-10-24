@@ -6,13 +6,15 @@
   <ol class="breadcrumb">
     <li class="breadcrumb-item active" aria-current="page"><a href="#">Home</a></li>
     <li class="breadcrumb-item"><a href="/biens">Les Biens </a></li>
-    <li class="breadcrumb-item ">Data</li>
+    <li class="breadcrumb-item "><a href="/admin">Administrateur </a></li>
   </ol>
 </nav>
 
-
-    <div class="jumbotron text-center">
-    <h1>Agence lorem ipsum</h1>
+    <div class="jumbotron text-center shadow-sm p-3 mb-5 bg-white rounded">
+    <img class=''src="https://images.pexels.com/photos/2287310/pexels-photo-2287310.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500">
+    </div>
+    <div class="jumbotron text-center shadow-sm p-3 mb-5 bg-white rounded">
+        <h1>Agence Immobiliere</h1>
         <p>Laborum dolore nisi ut officia nostrud tempor sit adipisicing amet duis sit do enim.
          Anim sit consequat reprehenderit et. Cupidatat reprehenderit anim voluptate velit
           laborum duis aliqua eiusmod est do tempor.</p>
@@ -20,48 +22,54 @@
 
     <div class="container">
     <h2>Les derniers biens</h2>
-    <div class='row flex'>
+    <div class='row flex mt-6 shadow-sm p-3 mb-5 bg-white rounded'>
      {% for property in properties %}
-        <div class="col-3">
-            <div class="card">
-                <div class="card-body">
-                <h5 class='card-title'>
-                 {# <a href={{ path ('property.show', {id: property.id,slug:property.slug} ) }}> {{property.title}} </a> #}
-                 {# <a href="{{ path ('property.show', {id: property.id,slug :property.slug}) }}"> {{ property.title }}</a> #}
-                 </h5>
-                 <p class='card-text'>{{ property.title}}</p>
-                 <p class='card-text'>rooms : {{ property.rooms}}</p>
-                 <p class='card-text'>{{ property.city}} {{ property.postalCode}}</p>
-                 <div class="text-primary" style="font-weight: bold;font-size:2rem">{{ property.FormattedPrice}} €</div>
-                 </div>
-            </div>
-        </div>
-        <div class="row">
-                <div class="col-md-8">
-                    <h2>Caractéristiques</h2>
-                    <table class="table-striped">
-                        <tr>
-                            <td>Surface habitable</td>
-                            <td>{{ property.surface }} m²</td>
-                        </tr>
-                        <tr>
-                            <td>Pièces</td>
-                            <td>{{ property.rooms }}</td>
-                        </tr>
-                        <tr>
-                            <td>Chambres</td>
-                            <td>{{ property.bedrooms }}</td>
-                        </tr>
-                        <tr>
-                            <td>Etage</td>
-                            <td>{{ property.floor }}</td>
-                        </tr>
-                        {# <tr>
-                            <td>Chaffage</td>
-                            <td>{{ property.heatType }}</td>
-                        </tr> #}
-                    </table>
+                
+                
+                <div class="col-6 width: 18rem;">
+                    <div class="card width: 18rem;">
+                        <div class="card-body width: 18rem;">
+                        <h5 class='card-title'>
+                        <a href={{ path ('property.show', {id: property.id,slug:property.slug} ) }}> {{property.title}} </a>
+                        {# <a href="{{ path ('property.show',{id: property.id,slug :property.slug})}}">{{ property.title }}</a> #}
+                        {# <a href="{{ path('property.show',{id:property.id,slug:property.slug})}}">{{ property.sold }}</a> #}
+                        {# <p class='card-text'>{{ property.title}}</p> #}
+                        </h5>
+                        <p class='card-text'>Piéces : {{ property.rooms}}</p>
+                        <p class='card-text'>{{ property.city}} {{ property.postalCode}}</p>
+                        <div class="text-primary" style="font-weight: bold;font-size:2rem">{{ property.FormattedPrice}} €</div>
+                        </div>
+                    </div>
                 </div>
+
+                <div class="row" style="margin-left: 5%;">
+                        <div class="col-md-12">
+                            <h2>Caractéristiques</h2>
+                            <table class="table-striped">
+                                <tr>
+                                    <td>Surface habitable</td>
+                                    <td>{{ property.surface }} m²</td>
+                                </tr>
+                                <tr>
+                                    <td>Pièces</td>
+                                    <td>{{ property.rooms }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Chambres</td>
+                                    <td>{{ property.bedrooms }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Etage</td>
+                                    <td>{{ property.floor }}</td>
+                                </tr>
+                                {# <tr>
+                                    <td>Chaffage</td>
+                                    <td>{{ property.heatType }}</td>
+                                </tr> #}
+                            </table>
+                        </div>
+                </div>
+
      {% endfor %}
         </div>
 {% endblock body %} 

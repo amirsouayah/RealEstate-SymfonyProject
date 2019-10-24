@@ -2,11 +2,24 @@
 
 namespace App\Controller;
 
-use App\Entity\Property;
-use App\Repository\PropertyRepository;
+
+
+// use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+// use Symfony\Component\Routing\Annotation\Route;
+// use Symfony\Component\HttpFoundation\Response;
+// use App\Entity\Property;
+// use App\Repository\PropertyRepository;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
+use App\Entity\Property;
+use App\Entity\PropertySearch;
+use App\Form\PropertySearchType;
+use App\Repository\PropertyRepository;
+use Doctrine\Common\Persistence\ObjectManager;
+use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 use Twig\Environment;
 
@@ -17,27 +30,19 @@ class PropertyController  extends AbstractController
      * @var PropertyRepository
      */
 
-
     private $repository;
-
-    /**
-     * @var ObjectManager
-     */
-
-    // private $em;
-
-    // public function __construct (PropertyRepository $repository, ObjectManager $em)
-    // {
-    //     $this->repository = $repository;
-    //     $this->em = $em;
-    // }
-
+    public function __construct(PropertyRepository $repository, ObjectManager $em)
+    {
+        $this->repository = $repository;
+        $this->em = $em;
+    }
+    
     /**
      * @Route("/biens", name="property.index")
      * @return Response
      */
 
-    public function index(): Response 
+    public function index(PaginatorInterface $paginator, Request $request): Response 
     {
 
         // $property = new Property();
@@ -69,20 +74,49 @@ class PropertyController  extends AbstractController
         // dump($repository);
         
         // $this->en->flush();
-            
-        // $property = $this->repository->findAllVisible();
-            return $this->render('property/index.html.twig',[
-                'current menu' => 'properties'
-            ]);
-        }
+        $search = new PropertySearch();
+        $form = $this->createForm(PropertySearchType::class, $search);
+        $form->handleRequest($request);
+        //Pagination
+        $properties = $paginator->paginate(
+            $this->repository->findAllVisibleQuery($search),
+            $request->query->getInt('page', 1),
+            8
+        );
+        return $this->render('property/index.html.twig', [
+            'current_menu' => 'properties',
+            'properties' => $properties,
+            'form' => $form->createView()
+        ]);
+    }
+        //         $search = new PropertySearch();
+        //         $form = $this->createForm(PropertySearchType::class,$search);
+        //         $form->handleRequest($request);    
+
+
+        //         $properties = $paginator->paginate(
+        //             $this->repository->findAllVisibleQuery($search),
+        //             $request->query->getInt('page',1),12
+        //         );
+                
+        //         return $this->render('property/index.html.twig', [
+        //             'current_menu' => 'properties',
+        //             'properties' => $properties,
+        //             'form'       => $form->createView()
+        //     ]);
+        // }
 
         /**
-        * @Route("/biens/{slug}-{id}", name="property.show")
+        * @Route("/biens/{id}/{slug}", name="property.show")
+        * @param Property $property
         * @return Response
         */
-        public function show($slug, $id): Reponse
+        public function show($id, $slug) 
         {
-            $property = $this->repository->find($id);
+            $repository = $this->getDoctrine()->getRepository(Property::Class);
+
+            
+            $property = $repository->find($id);
             return $this->render('property/show.html.twig',[
                 'property' => $property,
                 'current menu' => 'properties'
